@@ -24,10 +24,17 @@ export class Cell extends UI {
     }
 
     revealCell() {
-        this.isReveal = true;
+        this.isRevealed = true;
         this.element.classList.remove('border--concave');
         this.element.classList.add('border--revealed');
-        if(this.isMined) this.element.classList.add('cell--mined');
+        if(this.isMined) {
+            this.element.classList.add('cell--mined') 
+            return;
+        }
+        if(this.value) {
+            this.element.textContent = this.value;
+            this.element.classList.add(`cell-info-${this.value}`);
+        }        
     }
 
     addMine() {
