@@ -18,50 +18,86 @@ class Game extends UI {
             cols: 30,
             mines: 99
         }
-    }
+    };
 
-    #numberOfRows;
-    #numberOfCols;
-    #numberOfMines;
+    #numberOfRows = null;
+    #numberOfCols = null;
+    #numberOfMines = null;
 
     #cells = [];
+    #cellsElements = null;
 
     #board;
 
     initializeGame() {
         this.#handleElements();
         this.#newGame()
-    }
+    };
 
-    #newGame(rows = this.#config.easy.rows, cols = this.#config.easy.cols, mines = this.#config.easy.mines) {
+    #newGame(rows = this.#config.normal.rows, cols = this.#config.normal.cols, mines = this.#config.normal.mines) {
         this.#numberOfRows = rows;
         this.#numberOfCols = cols; 
         this.#numberOfMines = mines; 
+        
+        this.#setStyles();
 
         this.#generateCells();
-    }
+        this.#renderBoard();
+
+        this.#cellsElements = this.getElements(this.UISelectors.cell);
+
+        this.#addCellsEventListeners()
+    };
 
     #handleElements() {
-        this.#board = getElement(this.UISelectors.board);
-    }
+        this.#board = this.getElement(this.UISelectors.board);
+    };
+
+    #addCellsEventListeners() {
+        this.#cellsElements.forEach((element) => {
+            element.addEventListener('click', this.#handleCellClick)
+            element.addEventListener('contextmenu', this.#handleCellContextMenu)
+        })
+    };
 
     #generateCells() {
         for(let row = 0; row < this.#numberOfRows; row++) {
             this.#cells[row] = [];
             for(let col = 0; col < this.#numberOfCols; col++) {
                 this.#cells[row].push(new Cell(col, row));
-            }
-        }
-    }
+            };
+        };
+        console.log(this.#cells)
+    };
 
     #renderBoard() {
         this.#cells.flat().forEach(cell => {
-            this.#board.insertAdjacentHTML('beforeend', cell)
+            this.#board.insertAdjacentHTML('beforeend', cell.createElement())
+            cell.element = cell.getElement(cell.selector);
         })
-    }
-}
+    };
+
+    #handleCellClick = (e) => {
+        const target = e.target;
+        const rowIndex = parseInt(target.getAttribute('data-y'), 10);
+        const colIndex = parseInt(target.getAttribute('data-x'), 10);
+        this.#cells[rowIndex][colIndex].revealCell();
+    };
+
+    #handleCellContextMenu = e => {
+        e.preventDefault();
+        const target = e.target;
+        const rowIndex = parseInt(target.getAttribute('data-y'), 10);
+        const colIndex = parseInt(target.getAttribute('data-x'), 10);
+        this.#cells[rowIndex][colIndex].toggleFlag();
+    };
+
+    #setStyles() {
+        document.documentElement.style.setProperty('--cells-in-row', this.#numberOfCols);
+    };
+};
 
 window.onload = function() {
     const game = new Game();
     game.initializeGame();
-}
+};

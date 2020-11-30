@@ -1,5 +1,8 @@
-export class Cell {
+import { UI } from "./UI.js";
+
+export class Cell extends UI {
     constructor(x,y) {
+        super();
         this.x = x;
         this.y = y;
         this.value = 0;
@@ -11,7 +14,18 @@ export class Cell {
     }
 
     createElement() {
-        const element = `<div class="cell border border--concave" data-cell data-x="${this.x} data-y="${this.y}"></div>`;
+        const element = `<div class="cell border border--concave" data-cell data-x="${this.x}" data-y="${this.y}"></div>`;
         return element;
+    }
+
+    toggleFlag() {
+        this.isFlagged = !this.isFlagged;
+        this.element.classList.toggle('cell--flagged');
+    }
+
+    revealCell() {
+        this.isReveal = true;
+        this.element.classList.remove('border--concave');
+        this.element.classList.add('border--revealed');
     }
 }
