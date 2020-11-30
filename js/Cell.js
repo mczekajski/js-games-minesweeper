@@ -6,7 +6,7 @@ export class Cell extends UI {
         this.x = x;
         this.y = y;
         this.value = 0;
-        this.isMine = false;
+        this.isMined = false;
         this.isRevealed = false;
         this.isFlagged = false;
         this.selector = `[data-x="${this.x}"][data-y="${this.y}"]`;
@@ -27,5 +27,10 @@ export class Cell extends UI {
         this.isReveal = true;
         this.element.classList.remove('border--concave');
         this.element.classList.add('border--revealed');
+        if(this.isMined) this.element.classList.add('cell--mined');
+    }
+
+    addMine() {
+        this.isMined = true;
     }
 }

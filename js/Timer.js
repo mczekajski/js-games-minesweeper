@@ -11,7 +11,7 @@ export class Timer extends UI {
   }
 
   startTimer() {
-    setInterval(() => this.#updateTimer(), 1000);
+    this.#interval = setInterval(() => this.#updateTimer(), 1000);
   }
 
   stopTimer() {

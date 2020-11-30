@@ -170,7 +170,12 @@ html {
 }
 
 .cell--flagged {
-  background-image: url('../assets/flag.svg')
+  background-image: url('../assets/flag.svg');
+}
+
+.cell--mined {
+  background-image: url('../assets/bomb.svg');
+  background-color: var(--alarm-color);
 }
 
 .hide {
